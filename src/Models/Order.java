@@ -1,18 +1,16 @@
 package Models;
 
-import Service.Customer;
-
 import java.util.Map;
 
 public final class Order {
         private final int orderId;
-        private final Customer customer;
+        private final Shipment.Customer customer;
         private boolean isShipped;
         private final int totalPrice;
         private final Map<Integer, Integer> products;
         private static int orderIndex;
 
-        public Order(Customer customer,Map<Integer, Integer> products, int totalPrice ) {
+        public Order(Shipment.Customer customer, Map<Integer, Integer> products, int totalPrice ) {
             orderIndex=orderIndex+1;
             this.orderId = orderIndex;
             this.customer = customer;

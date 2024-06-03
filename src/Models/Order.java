@@ -4,13 +4,13 @@ import java.util.Map;
 
 public final class Order {
         private final int orderId;
-        private final Shipment.Customer customer;
+        public static Customer customer;
         private boolean isShipped;
         private final int totalPrice;
         private final Map<Integer, Integer> products;
         private static int orderIndex;
 
-        public Order(Shipment.Customer customer, Map<Integer, Integer> products, int totalPrice ) {
+        public Order(Customer customer, Map<Integer, Integer> products, int totalPrice ) {
             orderIndex=orderIndex+1;
             this.orderId = orderIndex;
             this.customer = customer;
@@ -31,6 +31,11 @@ public final class Order {
         return totalPrice;
         }
 
+        public int getCustomerId(){
+
+            return customer.getUserId();
+        }
+
         public boolean isShipped() {
             return isShipped;
         }
@@ -42,4 +47,5 @@ public final class Order {
         public Map<Integer, Integer> getProducts() {
         return products;
     }
+
 }

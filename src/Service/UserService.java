@@ -1,22 +1,16 @@
 package Service;
 
-
 import Models.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import Repository.UserRepository;
+
 import java.util.Scanner;
 
 public class UserService {
-    private static List<User> users = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
-
-    public static void addUser(User user) {
-        users.add(user);
-    }
+    public static final Scanner scanner = new Scanner(System.in);
 
     public static void createUser() {
-        System.out.println("Adding a new customer...");
+        System.out.println("Adding a new user...");
         System.out.println();
 
         System.out.print("Enter first name: ");
@@ -36,20 +30,16 @@ public class UserService {
 
         User newUser = new Customer(firstName, lastName, email, address, phoneNumber);
 
-        users.add(newUser);
-        System.out.println("Adding a new user...");
+        UserRepository.addUser(newUser); // Adaugă utilizatorul în baza de date
+        System.out.println("User added successfully!");
+        AuditService.logAction("User added: " + newUser.getFirstName() + " "+ newUser.getLastName());
+
         System.out.println();
     }
 
     public static void viewAllUsers() {
         System.out.println("All Users:");
-        for (User user : users) {
-            System.out.println(user.getUserId() + ": " + user.getFirstName() + " " + user.getLastName());
-        }
-        if (users.isEmpty()) {
-            System.out.println("No users found.");
-        }
-        System.out.println();
+        UserRepository.displayAllUsers();
     }
 
     public static void deleteUser() {
@@ -58,21 +48,8 @@ public class UserService {
         int userIdToDelete = scanner.nextInt();
         scanner.nextLine();
 
-        User userToDelete = null;
-        for (User user : users) {
-            if (user.getUserId() == userIdToDelete) {
-                userToDelete = user;
-                break;
-            }
-        }
-
-        if (userToDelete != null) {
-            users.remove(userToDelete);
-            System.out.println("User deleted successfully.");
-        } else {
-            System.out.println("User with ID " + userIdToDelete + " not found.");
-        }
+        UserRepository.deleteUser(userIdToDelete);
+        AuditService.logAction("User with ID " + userIdToDelete+" deleted");
         System.out.println();
     }
 }
-

@@ -142,4 +142,9 @@ public class Customer extends User {
     public Map<Integer, Integer> getShoppingCart() {
         return shoppingCart;
     }
+
+    @Override
+    public int getUserId() {
+        return super.getUserId();
+    }
 }

@@ -1,7 +1,9 @@
 package Service;
 
 import Models.*;
+import Service.AuditService;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -59,6 +61,12 @@ public class ProductService {
 
         Inventory.addProductInventory(newProduct, numberOfProducts);
 
+        try {
+            AuditService.getInstance().logAction("Product added: " + newProduct.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println();
         System.out.println("Product added successfully.");
         System.out.println();
@@ -83,6 +91,11 @@ public class ProductService {
         } else {
             System.out.println("Product with ID " + productId + " not found.");
             System.out.println();
+        }
+        try {
+            AuditService.getInstance().logAction("Product deleted: " + productToDelete.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

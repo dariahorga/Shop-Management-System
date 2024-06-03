@@ -1,35 +1,33 @@
 package Service;
 
-import Models.*;
+import Models.Customer;
+import Models.Inventory;
+import Models.Order;
+import Models.Product;
+import Repository.OrderRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
-import java.util.Scanner;
 
 public class OrderService {
 
-    private static List<Order> orders = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
-
+    // Metoda pentru adăugarea unei comenzi
     public static void addOrder(Order order) {
-        orders.add(order);
+        AuditService.logAction("Order added: " + order.getOrderId());
+        OrderRepository.addOrder(order);
     }
 
+    // Metoda pentru afișarea comenzilor
     public static void displayOrders() {
-        System.out.println("Orders:");
-        for (Order order : orders) {
-            System.out.print(order.getOrderId() + ":  ");
-            System.out.println(order.getTotalPrice() + " RON");
+        OrderRepository.getAllOrders().forEach(order -> {
+            System.out.println("Order ID: " + order.getOrderId());
             System.out.println("Customer: " + order.getCustomer());
+            System.out.println("Total Price: " + order.getTotalPrice());
             System.out.println();
-        }
-        if (orders.isEmpty()) {
-            System.out.println("No orders found.");
-        }
-        System.out.println();
+        });
     }
 
+    // Metoda pentru plasarea unei comenzi
     public static void placeOrder(Customer customer) {
         if (customer.getShoppingCart().isEmpty()) {
             System.out.println("Your shopping cart is empty. Cannot place an order.");
@@ -38,15 +36,7 @@ public class OrderService {
         }
         int totalCost = calculateTotalCost(customer.getShoppingCart());
 
-        Shipment.Customer shipmentCustomer = new Shipment.Customer(
-                customer.getFirstName(),
-                customer.getLastName(),
-                customer.getEmail(),
-                customer.getAddress(),
-                customer.getPhoneNumber()
-        );
-
-        Order order = new Order(shipmentCustomer, customer.getShoppingCart(), totalCost);
+        Order order = new Order(customer, customer.getShoppingCart(), totalCost);
 
         for (Map.Entry<Integer, Integer> entry : customer.getShoppingCart().entrySet()) {
             int productId = entry.getKey();
@@ -55,17 +45,20 @@ public class OrderService {
             if (product != null) {
                 Inventory.decrementProductQuantity(product, quantity);
             }
+                AuditService.logAction("Order placed : " + order.getOrderId());
         }
+
+        OrderRepository.addOrder(order);
 
         System.out.println("Order placed successfully!");
         System.out.println("Order ID: " + order.getOrderId());
         System.out.println("Total Cost: " + totalCost);
         System.out.println();
-        customer.emptyShoppingCart();
 
-        addOrder(order);
+        customer.emptyShoppingCart();
     }
 
+    // Metoda pentru calcularea costului total al comenzii
     private static int calculateTotalCost(Map<Integer, Integer> shoppingCart) {
         int totalCost = 0;
         for (Map.Entry<Integer, Integer> entry : shoppingCart.entrySet()) {

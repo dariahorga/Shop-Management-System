@@ -14,7 +14,7 @@ public class AdminRepository {
     private static final Connection connection = DatabaseConfiguration.getDatabaseConnection();
 
     public static void createTable() {
-        String createTableSql = "CREATE TABLE IF NOT EXISTS Admins (" +
+        String createTableSql = "CREATE TABLE IF NOT EXISTS Admin (" +
                 "adminId INT AUTO_INCREMENT PRIMARY KEY," +
                 "userId INT NOT NULL," +
                 "firstName VARCHAR(255) NOT NULL," +
@@ -86,7 +86,7 @@ public class AdminRepository {
         int userIdToDelete = scanner.nextInt();
         scanner.nextLine();
 
-        UserRepository.deleteUser(userIdToDelete); // Șterge utilizatorul din baza de date
+        UserRepository.deleteUser(userIdToDelete);
         System.out.println();
     }
 }

@@ -30,7 +30,7 @@ public class UserService {
 
         User newUser = new Customer(firstName, lastName, email, address, phoneNumber);
 
-        UserRepository.addUser(newUser); // Adaugă utilizatorul în baza de date
+        UserRepository.addUser(newUser);
         System.out.println("User added successfully!");
         AuditService.logAction("User added: " + newUser.getFirstName() + " "+ newUser.getLastName());
 

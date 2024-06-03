@@ -72,7 +72,7 @@ public class ProductService {
         System.out.println();
     }
 
-    public static void deleteProduct() {
+    public static void deleteProduct() throws IOException {
         System.out.println("Enter product id:");
         int productId = scanner.nextInt();
         scanner.nextLine();
@@ -92,11 +92,8 @@ public class ProductService {
             System.out.println("Product with ID " + productId + " not found.");
             System.out.println();
         }
-        try {
-            AuditService.getInstance().logAction("Product deleted: " + productToDelete.getName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        AuditService.getInstance().logAction("Product deleted: " + productToDelete.getName());
+
     }
 
     public static Product[][] categorisedProducts() {

@@ -4,6 +4,7 @@ import Service.OrderService;
 import Service.ProductService;
 import Service.UserService;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Admin extends User {
@@ -17,7 +18,7 @@ public class Admin extends User {
     }
 
     @Override
-    public void userActions() {
+    public void userActions() throws IOException {
         System.out.println("Welcome, Admin!");
         System.out.println();
         int choice;

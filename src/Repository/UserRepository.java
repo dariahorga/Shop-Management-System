@@ -36,8 +36,10 @@ public class UserRepository {
         try {
             String insertUserSql = "INSERT INTO User (firstName, lastName, email, address, phoneNumber) " +
                     "VALUES (?, ?, ?, ?, ?)";
-            String insertAdminSql = "INSERT INTO Admin (userId) VALUES (?)";
-            String insertCustomerSql = "INSERT INTO Customer (userId) VALUES (?)";
+            String insertAdminSql = "INSERT INTO Admin (userId, firstName, lastName, email, address, phoneNumber) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+            String insertCustomerSql = "INSERT INTO Customer (userId, firstName, lastName, email, address, phoneNumber) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement userStatement = connection.prepareStatement(insertUserSql, Statement.RETURN_GENERATED_KEYS);
             userStatement.setString(1, user.getFirstName());
@@ -55,12 +57,24 @@ public class UserRepository {
             }
 
             if (user instanceof Admin) {
+                Admin admin = (Admin) user;
                 PreparedStatement adminStatement = connection.prepareStatement(insertAdminSql);
                 adminStatement.setInt(1, userId);
+                adminStatement.setString(2, admin.getFirstName());
+                adminStatement.setString(3, admin.getLastName());
+                adminStatement.setString(4, admin.getEmail());
+                adminStatement.setString(5, admin.getAddress());
+                adminStatement.setLong(6, admin.getPhoneNumber());
                 adminStatement.executeUpdate();
             } else if (user instanceof Customer) {
+                Customer customer = (Customer) user;
                 PreparedStatement customerStatement = connection.prepareStatement(insertCustomerSql);
                 customerStatement.setInt(1, userId);
+                customerStatement.setString(2, customer.getFirstName());
+                customerStatement.setString(3, customer.getLastName());
+                customerStatement.setString(4, customer.getEmail());
+                customerStatement.setString(5, customer.getAddress());
+                customerStatement.setLong(6, customer.getPhoneNumber());
                 customerStatement.executeUpdate();
             }
 
@@ -70,6 +84,7 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
+
 
     public static Set<User> getAllUsers() {
         String selectSql = "SELECT * FROM User;";

@@ -1,64 +1,42 @@
 package Service;
 
 import Models.Review;
+import Repository.ReviewRepository;
 
+import java.io.IOException;
 import java.util.Scanner;
-
 
 public class ReviewService {
 
-    private static Review[] reviews = new Review[40];
     private static Scanner scanner = new Scanner(System.in);
-    public static void addReview(Review review) {
-        for (int i = 0; i < reviews.length; i++) {
-            if (reviews[i] == null) {
-                reviews[i] = review;
-                System.out.println("Review added successfully.");
-                System.out.println();
-                return;
-            }
-        }
-        System.out.println();
-    }
 
-    public static Review[] getAllReviews() {
-        return reviews;
+    public static void addReview(Review review) throws IOException {
+        ReviewRepository.addReview(review);
+        System.out.println("Review added successfully.");
+        System.out.println();
+        AuditService.getInstance().logAction("Review with ID " + review.getReviewId() + " added");
     }
 
     public static void displayReviewsForProduct() {
-        boolean found = false;
+        System.out.print("Enter product id: ");
+        int productId = scanner.nextInt();
 
-        Review[] reviews = getAllReviews();
-        if (reviews.length == 0 || reviews == null) {
-            System.out.println("No reviews found.");
+        Review[] reviews = ReviewRepository.getReviewsByProductId(productId);
+        if (reviews.length == 0) {
+            System.out.println("No reviews found for product with ID " + productId);
             System.out.println();
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter product id: ");
-        int productId = scanner.nextInt();
-
+        System.out.println("Reviews for product with ID " + productId + ":");
         for (Review review : reviews) {
-            if (review != null && review.getProductId() == productId) {
-                found = true;
-                System.out.println("Reviews for product with ID " + productId + ":");
-                System.out.println("Rating: " + review.getRating());
-                System.out.println("Comment: " + review.getComment());
-                System.out.println("-----------------------");
-                System.out.println();
-            }
-        }
-
-        if (!found) {
-            System.out.println("No reviews found for product with ID " + productId);
-            System.out.println();
+            System.out.println("Rating: " + review.getRating());
+            System.out.println("Comment: " + review.getComment());
+            System.out.println("-----------------------");
         }
     }
 
-    public static void createReview() {
-        Scanner scanner = new Scanner(System.in);
-
+    public static void createReview() throws IOException {
         System.out.print("Enter user ID: ");
         int userId = scanner.nextInt();
         scanner.nextLine();
@@ -77,6 +55,5 @@ public class ReviewService {
         Review review = new Review(userId, productId, comment, rating);
 
         addReview(review);
-
     }
 }

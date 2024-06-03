@@ -1,5 +1,6 @@
 package Models;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,6 @@ public abstract class User {
         this.email = email;
     }
 
-    public abstract void userActions();
+    public abstract void userActions() throws IOException;
 
 }

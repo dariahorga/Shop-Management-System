@@ -1,14 +1,12 @@
 import Models.*;
-import Repository.AdminRepository;
-import Repository.CustomerRepository;
-import Repository.OrderRepository;
-import Repository.UserRepository;
+import Repository.*;
 import Models.Admin;
 import Models.Customer;
 import Models.User;
 import Service.OrderService;
 import config.DatabaseConfiguration;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -17,13 +15,14 @@ import static Models.Order.customer;
 
 public class Main {
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws IOException {
             DatabaseConfiguration.getDatabaseConnection();
 
             OrderRepository.createTable();
             CustomerRepository.createTable();
             AdminRepository.createTable();
             UserRepository.createTable();
+            ReviewRepository.createTable();
 
             Admin admin1 = new Admin("John", "Doe", "john.doe@example.com", "123 Main St", 1234567890);
             Admin admin2 = new Admin("Alice", "Smith", "alice.smith@example.com", "456 Oak St", 234567);

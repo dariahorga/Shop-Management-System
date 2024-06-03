@@ -33,4 +33,16 @@ public class Review {
         return comment;
     }
 
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public LocalDate getReviewDate()
+    {
+    return reviewDate;
+    }
 }

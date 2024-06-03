@@ -12,8 +12,8 @@ import java.util.Map;
 public class OrderService {
 
     // Metoda pentru adăugarea unei comenzi
-    public static void addOrder(Order order) {
-        AuditService.logAction("Order added: " + order.getOrderId());
+    public static void addOrder(Order order) throws IOException {
+        AuditService.getInstance().logAction("Order added: " + order.getOrderId());
         OrderRepository.addOrder(order);
     }
 
@@ -28,7 +28,7 @@ public class OrderService {
     }
 
     // Metoda pentru plasarea unei comenzi
-    public static void placeOrder(Customer customer) {
+    public static void placeOrder(Customer customer) throws IOException {
         if (customer.getShoppingCart().isEmpty()) {
             System.out.println("Your shopping cart is empty. Cannot place an order.");
             System.out.println();
@@ -45,7 +45,7 @@ public class OrderService {
             if (product != null) {
                 Inventory.decrementProductQuantity(product, quantity);
             }
-                AuditService.logAction("Order placed : " + order.getOrderId());
+            AuditService.getInstance().logAction("Order placed : " + order.getOrderId());
         }
 
         OrderRepository.addOrder(order);

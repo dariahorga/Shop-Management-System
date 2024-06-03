@@ -7,6 +7,7 @@ import Service.OrderService;
 import Service.ProductService;
 import Service.ReviewService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class Customer extends User {
     }
 
     @Override
-    public void userActions() {
+    public void userActions() throws IOException {
         System.out.println("Welcome, " + firstName + " " + lastName + "!");
         System.out.println();
         int choice;
